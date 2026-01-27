@@ -40,6 +40,7 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 		return fmt.Errorf("Couldn't create feed follow for user %s and feed %s", user.Name, feed.Name)
 	}
 
+	fmt.Println("=======================================")
 	fmt.Println("Feed follow entry created successfully.")
 	printFeedFollow(follow)
 	

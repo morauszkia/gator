@@ -33,10 +33,41 @@ func handlerAddFeed(s *state, cmd command) error {
 
 	fmt.Println("Feed added successfully")
 	printFeed(feed)
+
+	follow, err := s.db.CreateFeedFollow(context.Background(), database.CreateFeedFollowParams{
+		ID: uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID: user.ID,
+		FeedID: feed.ID,
+	})
+	if err != nil {
+		return fmt.Errorf("Couldn't create feed follow for user %s and feed %s", user.Name, feed.Name)
+	}
+
+	fmt.Println("Feed follow entry created successfully.")
+	printFeedFollow(follow)
 	
 	return nil
 }
 
+func handlerFeeds(s *state, cmd command) error {
+	if len(cmd.args) != 0 {
+		return fmt.Errorf("Usage: %s", cmd.name)
+	}
+	feeds, err := s.db.GetFeeds(context.Background())
+	if err != nil {
+		return fmt.Errorf("Couldn't get feeds: %w", err)
+	}
+	for i, feed := range feeds {
+		user, err := s.db.GetUserById(context.Background(), feed.UserID)
+		if err != nil {
+			return fmt.Errorf("Couldn't get user data for feed %s, added by user %s", feed.Name, feed.UserID)
+		}
+		fmt.Printf("* %d. %s (%s) - added by: %s\n", i+1, feed.Name, feed.Url, user.Name)
+	}
+	return nil
+}
 
 func handlerAgg(s *state, cmd command) error {
 	if len(cmd.args) != 0 {

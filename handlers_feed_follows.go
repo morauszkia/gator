@@ -9,15 +9,9 @@ import (
 	"github.com/morauszkia/gator/internal/database"
 )
 
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, user database.User) error {
 	if len(cmd.args) != 1 {
 		return fmt.Errorf("Usage: %s <url>", cmd.name)
-	}
-
-	userName := s.config.CurrentUserName
-	user, err := s.db.GetUser(context.Background(), userName)
-	if err != nil {
-		return fmt.Errorf("Couldn't get current user data: %w", err)
 	}
 
 	feed, err := s.db.GetFeed(context.Background(), cmd.args[0])
@@ -42,14 +36,9 @@ func handlerFollow(s *state, cmd command) error {
 	return nil
 }
 
-func handlerFollowing(s* state, cmd command) error {
+func handlerFollowing(s* state, cmd command, user database.User) error {
 	if len(cmd.args) != 0 {
 		return fmt.Errorf("Usage: %s", cmd.name)
-	}
-
-	user, err := s.db.GetUser(context.Background(), s.config.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("Couldn't get current user data: %w", err)
 	}
 
 	feeds, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)

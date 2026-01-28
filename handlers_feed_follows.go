@@ -38,7 +38,7 @@ func handlerFollow(s *state, cmd command, user database.User) error {
 
 func handlerUnfollow(s *state, cmd command, user database.User) error {
 	if len(cmd.args) != 1 {
-		return fmt.Errorf("Usage: %s <url>")
+		return fmt.Errorf("Usage: %s <url>", cmd.name)
 	}
 
 	feed, err := s.db.GetFeed(context.Background(), cmd.args[0])

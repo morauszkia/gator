@@ -64,16 +64,3 @@ func handlerFeeds(s *state, cmd command) error {
 	}
 	return nil
 }
-
-func handlerAgg(s *state, cmd command) error {
-	if len(cmd.args) != 0 {
-		return fmt.Errorf("Usage: %s", cmd.name)
-	}
-	feedUrl := "https://www.wagslane.dev/index.xml"
-	feed, err := fetchFeed(context.Background(), feedUrl)
-	if err != nil {
-		return fmt.Errorf("Couldn't fetch feed: %w", err)
-	}
-	fmt.Printf("%+v", *feed)
-	return nil
-}

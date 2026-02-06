@@ -52,7 +52,7 @@ func handlerUnfollow(s *state, cmd command, user database.User) error {
 	}); err != nil {
 		return fmt.Errorf("Couldn't delete feed follow entry: %w", err)
 	}
-	fmt.Printf("%s is no longer following %s", user.Name, feed.Name)
+	fmt.Printf("%s is no longer following %s\n", user.Name, feed.Name)
 	return nil
 }
 
